@@ -22,8 +22,8 @@ class VoucherUrl extends Module
 
         parent::__construct();
 
-        $this->displayName = $this->l('Voucher Url Module');
-        $this->description = $this->l('Aggiungi un Voucher tramite un URL speciale');
+        $this->displayName = $this->l('Add Voucher by Link');
+        $this->description = $this->l('Add Voucher By Link is a very simple Prestashop Module that allows to add a Voucher in the cart of a costumer through a customized URL');
     }
 
     /**
@@ -34,8 +34,7 @@ class VoucherUrl extends Module
     {
         Configuration::updateValue('VOUCHERURL_LIVE_MODE', false);
         if (!parent::install() OR
-            !$this->registerHook('header') OR
-            !$this->registerHook('cart')
+            !$this->registerHook('header')
         )
             return false;
         return true;
@@ -189,37 +188,11 @@ class VoucherUrl extends Module
     {
         $this->context->controller->addJS($this->_path.'/views/js/front.js');
         $this->context->controller->addCSS($this->_path.'/views/css/front.css');
-        //global $cookie;
         if (Tools::getValue('voucher')){
-            setcookie("voucherCode", Tools::getValue('voucher'));
-            //$cookie->voucherCode = Tools::getValue('voucher');
+            $cartVoucher = Tools::getValue('voucher');
+            $idDiscount = Discount::getIdByName($cartVoucher);
+            Context::getContext()->cart->addDiscount($idDiscount);
         }
     }
 
-    public function hookCart($params){
-
-        if (isset($_COOKIE['voucherCode'])){
-
-            $vouchersInCart = $params['cart']->getDiscounts();
-            $vouchersInCartIds = array();
-            if (count($vouchersInCart)>0){
-                foreach($vouchersInCart as $voucher){
-                    $vouchersInCartIds[] = $voucher['id_discount'];
-                }
-            }
-            $idDiscount = Discount::getIdByName($_COOKIE['voucherCode']);
-
-            if (in_array($idDiscount,$vouchersInCartIds)){
-                unset($_COOKIE['voucherCode']);
-            }
-            else{
-                $discountObj = New Discount($idDiscount);
-                $totalType = Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING;
-                if ($params['cart']->getOrderTotal(true,$totalType) >= Configuration::get(PS_PURCHASE_MINIMUM) && $params['cart']->getOrderTotal(true,$totalType) >= $discountObj->minimal){
-                        $params['cart']->addDiscount($idDiscount);
-                        unset($params['cookie']->voucherCode);
-                }
-            }
-        }
-    }
 }
