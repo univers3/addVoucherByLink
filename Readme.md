@@ -1,18 +1,22 @@
 # Add Voucher By Link
 ==========
 
-Add Voucher By Link is s simple Prestashop Module that allows passing voucher codes through the URL
+Add Voucher By Link is s simple Prestashop Module that allows passing voucher codes through the URL.
 It´s as easy to use as adding the parameter 'voucher' anywhere in the URL, in any prestashop page.
-The code will have to be created, of course, previously.
+The code will have to be previously created.
 
-Once added it will create a temporary variable in the global cookie with the name of the voucher and will add it to the cart once the cart meets the voucher requeriments. Once this happens the temp variable is removed.
+Once the costumer will open the page, the voucher will be immediately added to the current cart.
 
-Voucher will be added only if cart products total are higher than minimum purhase and higher than minimun voucher.
+Any fix you find or any improvement will be appreciated and added.
 
-example URL: 
+# INSTALLATION
 
-http:://myshop.com/index.php?voucher=MYVOUCHER
+Download this repo as a zip and upload to your backoffice as a normal module
 
-http:://myshop.com/es/ipods?voucher=MYVOUCHER
+# USAGE
 
-Any fix you find or any improvement will be wellcomed and added.
+Create a customized URL with every page you want: 
+
+http:://myshop.com/?voucher=MYVOUCHER
+
+http:://myshop.com/it/ipods?voucher=MYVOUCHER
